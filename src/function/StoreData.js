@@ -13,7 +13,7 @@ export default async function StoreData(token) {
     formdata,
     {
       headers: {
-        Authorization: `Bearer ${token[0]}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   );

@@ -1,10 +1,11 @@
-import "./App.css";
-import "rsuite/dist/rsuite.min.css";
 import { Button } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
-import { selectToken, updateToken } from "./store/slice/token";
+import { removeToken, selectToken, updateToken } from "./store/slice/token";
 import GetToken from "./function/GetToken";
 import StoreData from "./function/StoreData";
+import SubmitData from "./function/Submit";
+import "./App.css";
+import "rsuite/dist/rsuite.min.css";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,18 +16,24 @@ function App() {
     await dispatch(updateToken(t));
   };
 
+  const handleRemoveToken = async () => {
+    const t = await SubmitData(token); // Remove token
+    await dispatch(removeToken(t)); // return data should be null
+  };
+
   console.log(token);
 
-  function render() {
-    if (token.length !== 0) {
-      return <Button onClick={() => StoreData(token)}>Send Data</Button>;
-    }
-  }
   return (
     <div className="App">
-      <Button onClick={handleGetToken}>Get Token</Button>
-      <p>current Token: {token ? token : "null"}</p>
-      {render()}
+      <Button
+        onClick={() => {
+          token ? handleRemoveToken() : handleGetToken();
+        }}
+      >
+        {token ? "Remove token" : "Get Token"}
+      </Button>
+      <p>current Token: {token}</p>
+      {token && <Button onClick={() => StoreData(token)}>Send Data</Button>}
     </div>
   );
 }
